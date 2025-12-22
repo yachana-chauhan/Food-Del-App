@@ -21,7 +21,7 @@ app.use(cors({
     origin: [
         "http://localhost:5173", // frontend
         "http://localhost:5174",// admin panel
-        "neon-sopapillas-945e3a.netlify.app"
+        "https://neon-sopapillas-945e3a.netlify.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
