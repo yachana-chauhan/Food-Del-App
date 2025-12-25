@@ -20,9 +20,15 @@ app.use(express.json());
 app.use(cors({
     origin: [
         "http://localhost:5173", // frontend
+<<<<<<< HEAD
+        "http://localhost:5174", // admin panel
+          "https://neon-sopapillas-945e3a.netlify.app", //frontend
+          "https://relaxed-tanuki-7b7956.netlify.app"
+=======
         "http://localhost:5174",// admin panel
         "https://neon-sopapillas-945e3a.netlify.app",
         "https://relaxed-tanuki-7b7956.netlify.app"
+>>>>>>> 88f83728142eb517162c935fddb28c8ca9184fa4
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
@@ -43,3 +49,4 @@ app.get("/",(req,res)=>{
 app.listen(port,()=>{
     console.log(`Server Started on http://localhost:${port}`)
 })
+
