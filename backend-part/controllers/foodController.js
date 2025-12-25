@@ -1,52 +1,51 @@
-import foodModel from "../models/foodModel.js";
-import fs from 'fs'
+import path from "path";
+import dotenv from "dotenv";
+dotenv.config({ path: path.resolve('./.env') }); 
 
-// add food item
+import express from "express"
 
-const addFood = async (req, res)=>{
-    
+import cors from "cors"
+import { connectDB } from "./config/db.js"
+import foodRouter from "./routes/foodRoute.js"
+import userRouter from "./routes/userRoute.js";
+import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 
-   
-    let image_filename =`${req.file.filename}`;
 
-    const food = new foodModel({
-        name:req.body.name,
-        description:req.body.description,
-        price:req.body.price,
-        category:req.body.category,
-        image:image_filename
-    })
-    try{
-        await food.save();
-        res.json({success:true, message:"Food Added"})
-    }catch(error){
-         console.log(error)
-         res.json({success:false,message:"Error"})
-    }
-}
+//app config
+const app= express();
+const port =process.env.PORT || 4000;
 
-//all food list
-const listFood=async (req,res)=>{
-    try{
-        const foods = await foodModel.find({});
-        res.json({success:true,data:foods})
-    }catch(error){
-        console.log(error);
-        res.json({success:false,message:"Error"})
-    }
-}
-//remove foo item
-const removeFood = async (req,res)=>{
-     try {
-        const food = await foodModel.findById(req.body.id);
-        fs.unlink(`uploads/${food.image}`,()=>{})
+app.use(express.json());
+app.use(cors({
+    origin: [
+        "http://localhost:5173", // frontend
+<<<<<<< HEAD
+        "http://localhost:5174", // admin panel
+          "https://neon-sopapillas-945e3a.netlify.app", //frontend
+          "https://relaxed-tanuki-7b7956.netlify.app"
+=======
+        "http://localhost:5174",// admin panel
+        "https://neon-sopapillas-945e3a.netlify.app",
+        "https://relaxed-tanuki-7b7956.netlify.app"
+>>>>>>> 88f83728142eb517162c935fddb28c8ca9184fa4
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+//db connection
+connectDB();
 
-        await foodModel.findByIdAndDelete(req.body.id);
-        res.json({success:true,message:"food removed"});
-     } catch (error) {
-        console.log(error);
-        res.json({success:false,mesaage:"Error"})
-     }
-}
+app.use("/api/food",foodRouter);
+app.use("/images",express.static('uploads'));
+app.use("/api/user",userRouter)
+app.use("/api/cart",cartRouter)
+app.use("/api/order",orderRouter)
 
-export {addFood,listFood,removeFood}
+app.get("/",(req,res)=>{
+    res.send("API working")
+
+})
+app.listen(port,()=>{
+    console.log(`Server Started on http://localhost:${port}`)
+})
